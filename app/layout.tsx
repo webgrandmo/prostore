@@ -1,12 +1,17 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '@/assets/styles/globals.css';
+import { APP_NAME, APP_DESCRIPTION, APP_SERVER_URL } from '@/lib/constants';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
 export const metadata: Metadata = {
-	title: 'Prostore',
-	description: 'A modern eCommerce platform',
+	title: {
+		template: `%s | Prostore`,
+		default: APP_NAME,
+	},
+	description: APP_DESCRIPTION,
+	metadataBase: new URL(APP_SERVER_URL),
 };
 
 export default function RootLayout({
