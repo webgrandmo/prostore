@@ -1,12 +1,11 @@
 import { getLatestProducts } from '@/lib/actions/product.actions';
 import ProductList from '@/components/shared/product/product-list';
-import { convertToPlainObject } from '@/lib/utils';
 export const metadata = {
 	title: 'Home',
 };
 
 const Homepage = async () => {
-	const latestProducts = convertToPlainObject(await getLatestProducts());
+	const latestProducts = await getLatestProducts();
 	return (
 		<>
 			<ProductList
