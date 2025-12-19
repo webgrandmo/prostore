@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
+
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import ProductPrice from './product-price';
-
-const ProductCard = ({ product }: { product: any }) => {
+import { Product } from '@/types';
+const ProductCard = ({ product }: { product: Product }) => {
 	return (
 		<Card className='w-full max-w-sm border-gray-200 py-0'>
 			<p></p>
