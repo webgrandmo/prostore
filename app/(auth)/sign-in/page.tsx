@@ -3,6 +3,9 @@ import { APP_NAME } from '@/lib/constants';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import Image from 'next/image';
+import CredentialsSignInForm from '@/components/forms/credentials-signin-form';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
 	title: 'Sign In',
@@ -10,7 +13,11 @@ export const metadata: Metadata = {
 		'Sign in to your ProStore account to access your dashboard and manage your products.',
 };
 
-const SignInPage = () => {
+const SignInPage = async () => {
+	const session = await auth();
+	if (session) {
+		return redirect('/');
+	}
 	return (
 		<div className='w-full max-w-md mx-auto'>
 			<Card>
@@ -32,7 +39,9 @@ const SignInPage = () => {
 						products.
 					</CardDescription>
 				</CardHeader>
-				<CardContent className='space-y-4'>{/* Sign In Form Component */}</CardContent>
+				<CardContent className='space-y-4'>
+					<CredentialsSignInForm />
+				</CardContent>
 			</Card>
 		</div>
 	);
