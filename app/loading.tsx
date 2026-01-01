@@ -9,6 +9,7 @@ const LoadingPage = () => {
 				alt='Loading...'
 				width={150}
 				height={150}
+				unoptimized
 			/>
 		</div>
 	);

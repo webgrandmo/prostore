@@ -1,22 +1,30 @@
 'use client';
 
-import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import SignInButton from './sign-in-button';
 import Link from 'next/link';
 import { useActionState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 import { signInWithCredentials } from '@/lib/actions/user.actions';
 import { SIGN_IN_DEFAULT_VALUES } from '@/lib/constants';
 
 const CredentialsSignInForm = () => {
+	const searchParams = useSearchParams();
+	const callbackUrl = searchParams.get('callbackUrl') || '/';
+
 	const [data, action] = useActionState(signInWithCredentials, {
 		success: false,
 		message: '',
 	});
 	return (
 		<form action={action}>
+			<input
+				type='hidden'
+				name='callbackUrl'
+				value={callbackUrl}
+			/>
 			<div className='space-y-6'>
 				<div>
 					<Label
