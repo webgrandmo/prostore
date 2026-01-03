@@ -23,3 +23,24 @@ export function formatNumberWithDecimals(value: number): string {
 	const [int, dec] = value.toString().split('.');
 	return dec ? `${int}.${dec.padEnd(2, '0')}` : `${int}.00`;
 }
+
+// Format form errors
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function formatError(error: any) {
+	if (error.name === 'ZodError') {
+		// Handle Zod Error
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const fieldErrors = JSON.parse(error.message).map((err: any) => err.message);
+		console.log(fieldErrors);
+
+		return fieldErrors.join('. ');
+	} else if (error.name === 'PrismaClientKnownRequestError' && error.code === 'P2002') {
+		// Handle Prisma Error
+		const field = error.meta?.target ? error.meta.target[0] : 'Field';
+		return `This ${field.charAt(0).toUpperCase() + field.slice(1)} already exists`;
+	} else {
+		// Handle Other Errors
+		return typeof error.message === 'string' ? error.message : JSON.stringify(error.message);
+	}
+}
