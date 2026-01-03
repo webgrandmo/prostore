@@ -96,7 +96,7 @@ const SignUpForm = () => {
 						href='/sign-in'
 						target='_self'
 						className='link'>
-						Sign Up
+						Sign In
 					</Link>
 				</div>
 			</div>

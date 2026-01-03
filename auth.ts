@@ -52,33 +52,37 @@ export const config = {
 		}),
 	],
 	callbacks: {
-		async session({
-			session,
-			user,
-			trigger,
-			token,
-		}: {
-			session: Session;
-			user?: User;
-			trigger?: 'update';
-			token: JWT;
-		}) {
-			// Add custom fields to session
+		async session({ session, token }: { session: Session; token: JWT }) {
+			// Set the user ID from the token
 			if (session.user) {
-				session.user.id = token.sub as string;
-
-				if (trigger === 'update' && user?.name) {
-					session.user.name = user.name;
-				}
-
-				if (token.role) {
-					// Extend session.user with role
-					(session.user as typeof session.user & { role?: string }).role =
-						token.role as string;
-				}
+				session.user.id = token.sub;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				(session.user as any).role = token.role as string;
+				session.user.name = token.name;
 			}
 
 			return session;
+		},
+
+		async jwt({ token, user }: { token: JWT; user?: User }) {
+			if (user) {
+				token.id = user.id;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				token.role = (user as any).role;
+
+				// If user has no name then use the email
+				if (user.name === 'NO_NAME') {
+					token.name = user.email!.split('@')[0];
+
+					// Update database to reflect the token name
+					await prisma.user.update({
+						where: { id: user.id },
+						data: { name: token.name },
+					});
+				}
+			}
+
+			return token;
 		},
 	},
 } satisfies NextAuthConfig;
